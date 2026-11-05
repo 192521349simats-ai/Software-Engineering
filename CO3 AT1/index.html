@@ -1,14 +1,111 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Cloud Cost Optimization</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Cost Optimization | FinOps Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <h1>Cloud Cost Optimization</h1>
-    <p>FinOps Management Platform</p>
+<div class="dashboard">
 
-    <script src="script.js"></script>
+    <aside class="sidebar">
+        <h2>☁ CloudWise</h2>
+        <p class="side-label">MAIN MENU</p>
+        <a class="active" href="#">▦ Dashboard</a>
+        <a href="#">◷ Cost Analysis</a>
+        <a href="#">▤ Budgets</a>
+        <a href="#">▣ Reports</a>
+        <a href="#">⚙ Settings</a>
+        <div class="sidebar-bottom">FinOps Management Platform</div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>Cloud Cost Dashboard</h1>
+                <p>Monitor and optimize your cloud spending</p>
+            </div>
+            <div class="profile">Admin Account</div>
+        </header>
+
+        <section class="summary-cards">
+            <div class="card">
+                <p>Total Cloud Spending</p>
+                <h2>$24,850</h2>
+                <span class="positive">↓ 8.5% from last month</span>
+            </div>
+            <div class="card">
+                <p>Monthly Budget</p>
+                <h2>$30,000</h2>
+                <span>82.8% utilized</span>
+            </div>
+            <div class="card">
+                <p>Potential Savings</p>
+                <h2>$4,250</h2>
+                <span class="positive">Optimization opportunity</span>
+            </div>
+            <div class="card">
+                <p>Active Resources</p>
+                <h2>1,284</h2>
+                <span>Across cloud providers</span>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel chart-panel">
+                <h3>Monthly Cloud Spending</h3>
+                <p>Cloud expenditure overview</p>
+                <canvas id="costChart"></canvas>
+            </div>
+
+            <div class="panel">
+                <h3>Provider Cost Breakdown</h3>
+                <p>Spending by cloud platform</p>
+                <div class="provider">
+                    <span>AWS</span><strong>$12,400</strong>
+                    <div class="progress"><div style="width:50%"></div></div>
+                </div>
+                <div class="provider">
+                    <span>Microsoft Azure</span><strong>$8,200</strong>
+                    <div class="progress"><div style="width:33%"></div></div>
+                </div>
+                <div class="provider">
+                    <span>Google Cloud</span><strong>$4,250</strong>
+                    <div class="progress"><div style="width:17%"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel expenses">
+            <h3>Recent Cloud Expenses</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Provider</th>
+                        <th>Category</th>
+                        <th>Monthly Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Virtual Machines</td><td>AWS</td><td>Compute</td><td>$6,400</td></tr>
+                    <tr><td>Cloud Storage</td><td>Azure</td><td>Storage</td><td>$3,200</td></tr>
+                    <tr><td>Database Services</td><td>Google Cloud</td><td>Database</td><td>$2,150</td></tr>
+                    <tr><td>Networking</td><td>AWS</td><td>Network</td><td>$1,800</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <footer>CloudWise FinOps Platform | Cloud Cost Optimization</footer>
+
+    </main>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
