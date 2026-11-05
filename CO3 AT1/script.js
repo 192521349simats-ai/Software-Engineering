@@ -1,0 +1,1 @@
+console.log("Cloud Cost Optimization Platform Loaded Successfully");
