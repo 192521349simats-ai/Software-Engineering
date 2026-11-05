@@ -1,0 +1,7 @@
+services:
+  cloud-dashboard:
+    build: .
+    container_name: cloud-cost-dashboard
+    ports:
+      - "8085:80"
+    restart: unless-stopped
