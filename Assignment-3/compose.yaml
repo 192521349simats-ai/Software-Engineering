@@ -1,0 +1,37 @@
+
+services:
+  web:
+    build: .
+    container_name: campusflow-web
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+      DB_NAME: smartcampus
+      DB_USER: campususer
+      DB_PASSWORD: campuspass
+      DB_PORT: 5432
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16
+    container_name: campusflow-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: smartcampus
+      POSTGRES_USER: campususer
+      POSTGRES_PASSWORD: campuspass
+    volumes:
+      - campus_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U campususer -d smartcampus"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  campus_data:
