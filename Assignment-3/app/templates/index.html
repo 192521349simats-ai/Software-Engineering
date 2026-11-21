@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFlow | Smart Campus</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+{% if not dashboard %}
+
+<div class="login-page">
+    <div class="login-visual">
+        <div class="visual-top">
+            <div class="brand"><i class="fa-solid fa-layer-group"></i> CampusFlow</div>
+            <span class="pill">SMART CAMPUS ECOSYSTEM</span>
+        </div>
+
+        <div class="visual-content">
+            <div class="visual-icon"><i class="fa-solid fa-building-columns"></i></div>
+            <h1>Spaces that inspire.<br><span>Campus that works.</span></h1>
+            <p>One intelligent platform to connect facilities, people and campus operations.</p>
+        </div>
+
+        <div class="visual-bottom">
+            <div class="mini-stat"><strong>Connected</strong><span>Campus facilities</span></div>
+            <div class="mini-stat"><strong>Streamlined</strong><span>Booking experience</span></div>
+            <div class="mini-stat"><strong>Efficient</strong><span>Maintenance operations</span></div>
+        </div>
+    </div>
+
+    <div class="login-area">
+        <div class="login-box">
+            <div class="mobile-brand brand"><i class="fa-solid fa-layer-group"></i> CampusFlow</div>
+            <div class="welcome-tag">WELCOME BACK</div>
+            <h2>Sign in to your workspace</h2>
+            <p class="muted">Access your campus facilities and workspace.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endwith %}
+
+            <form action="{{ url_for('main.login') }}" method="POST">
+                <label>Email address</label>
+                <div class="input-wrap">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input type="email" name="email" placeholder="name@campus.com" required>
+                </div>
+
+                <label>Password</label>
+                <div class="input-wrap">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" name="password" id="password" placeholder="Enter your password" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword()"><i class="fa-regular fa-eye"></i></button>
+                </div>
+
+                <button type="submit" class="primary-btn login-btn">Sign In <i class="fa-solid fa-arrow-right"></i></button>
+            </form>
+
+            <div class="demo-box">
+                <strong><i class="fa-solid fa-circle-info"></i> Demo access</strong>
+                <p>Admin: admin@campus.com / admin123</p>
+                <p>Manager: manager@campus.com / manager123</p>
+                <p>Technician: tech@campus.com / tech123</p>
+                <p>Student: student@campus.com / student123</p>
+            </div>
+
+            <div class="login-footer">CampusFlow &copy; 2026 · Smart Facility Management</div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand"><i class="fa-solid fa-layer-group"></i> CampusFlow</div>
+        <div class="sidebar-caption">WORKSPACE</div>
+
+        <nav>
+            <a class="nav-link active" href="#overview"><i class="fa-solid fa-chart-pie"></i> Overview</a>
+            <a class="nav-link" href="#facilities"><i class="fa-solid fa-building"></i> Facilities</a>
+            <a class="nav-link" href="#bookings"><i class="fa-regular fa-calendar-check"></i> Bookings</a>
+            <a class="nav-link" href="#maintenance"><i class="fa-solid fa-screwdriver-wrench"></i> Maintenance</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-help">
+                <i class="fa-solid fa-headset"></i>
+                <strong>Campus support</strong>
+                <small>Need help with a facility?</small>
+            </div>
+            <a href="{{ url_for('main.logout') }}" class="nav-link logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</a>
+        </div>
+    </aside>
+
+    <main class="main-area" id="overview">
+        <header class="topbar">
+            <div>
+                <div class="top-label">SMART CAMPUS / WORKSPACE</div>
+                <h2>Campus overview</h2>
+            </div>
+            <div class="profile">
+                <div class="avatar">{{ name[0]|upper }}</div>
+                <div><strong>{{ name }}</strong><small>{{ role }}</small></div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
+
+        <section class="hero-banner">
+            <div class="hero-text">
+                <span class="hero-chip"><i class="fa-solid fa-sparkles"></i> CAMPUS OPERATIONS</span>
+                <h1>Everything on campus,<br>in one place.</h1>
+                <p>Manage spaces, streamline bookings and keep facilities running smoothly.</p>
+                <a href="#bookings" class="hero-button">Explore workspace <i class="fa-solid fa-arrow-down"></i></a>
+            </div>
+            <div class="hero-art"><i class="fa-solid fa-city"></i><div class="art-circle"></div></div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-building"></i></div><span>Total facilities</span><h3>{{ facility_count }}</h3><small>Registered campus spaces</small></div>
+            <div class="stat-card"><div class="stat-icon blue"><i class="fa-solid fa-calendar-check"></i></div><span>Total bookings</span><h3>{{ booking_count }}</h3><small>All booking requests</small></div>
+            <div class="stat-card"><div class="stat-icon orange"><i class="fa-solid fa-hourglass-half"></i></div><span>Pending approvals</span><h3>{{ pending_count }}</h3><small>Awaiting decision</small></div>
+            <div class="stat-card"><div class="stat-icon green"><i class="fa-solid fa-wrench"></i></div><span>Active tickets</span><h3>{{ active_tickets }}</h3><small>Unresolved maintenance</small></div>
+        </section>
+
+        <section class="content-grid" id="facilities">
+            <div class="panel">
+                <div class="panel-heading">
+                    <div><span class="section-label">CAMPUS DIRECTORY</span><h3>Available facilities</h3></div>
+                    <span class="count-badge">{{ facilities|length }} spaces</span>
+                </div>
+                <div class="facility-grid">
+                    {% for f in facilities %}
+                    <div class="facility-card">
+                        <div class="facility-art art-{{ loop.index }}">
+                            <i class="fa-solid {% if f.category == 'Laboratory' %}fa-computer{% elif f.category == 'Classroom' %}fa-chalkboard{% elif f.category == 'Event Space' %}fa-users{% elif f.category == 'Research' %}fa-flask{% elif f.category == 'Meeting' %}fa-people-group{% else %}fa-lightbulb{% endif %}"></i>
+                        </div>
+                        <div class="facility-info">
+                            <span class="category">{{ f.category }}</span>
+                            <h4>{{ f.name }}</h4>
+                            <p><i class="fa-solid fa-location-dot"></i> {{ f.location }}</p>
+                            <div class="facility-bottom"><span><i class="fa-solid fa-users"></i> {{ f.capacity }} seats</span><span class="available">{{ f.status }}</span></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="panel booking-panel">
+                <div class="panel-heading">
+                    <div><span class="section-label">RESERVE A SPACE</span><h3>New booking</h3></div>
+                    <div class="round-icon"><i class="fa-regular fa-calendar-plus"></i></div>
+                </div>
+
+                <form action="{{ url_for('main.book') }}" method="POST" class="form-stack">
+                    <label>Select facility</label>
+                    <select name="facility_id" required>
+                        <option value="">Choose a space</option>
+                        {% for f in facilities %}
+                        <option value="{{ f.facility_id }}">{{ f.name }} · {{ f.capacity }} seats</option>
+                        {% endfor %}
+                    </select>
+
+                    <label>Start time</label>
+                    <input type="datetime-local" name="start_time" required>
+
+                    <label>End time</label>
+                    <input type="datetime-local" name="end_time" required>
+
+                    <label>Purpose</label>
+                    <input type="text" name="purpose" placeholder="Meeting, class, event..." required>
+
+                    <button class="primary-btn" type="submit">Submit booking request <i class="fa-solid fa-arrow-right"></i></button>
+                </form>
+            </div>
+        </section>
+
+        <section class="panel" id="bookings">
+            <div class="panel-heading">
+                <div><span class="section-label">BOOKING WORKFLOW</span><h3>Recent bookings</h3></div>
+                <span class="count-badge">{{ bookings|length }} records</span>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>REQUESTER</th><th>FACILITY</th><th>TIME</th><th>PURPOSE</th><th>STATUS</th><th>ACTION</th></tr></thead>
+                    <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td><strong>{{ b.user_name }}</strong></td>
+                        <td>{{ b.facility_name }}</td>
+                        <td>{{ b.start_time.strftime('%d %b %Y, %H:%M') }}<br><small>to {{ b.end_time.strftime('%H:%M') }}</small></td>
+                        <td>{{ b.purpose }}</td>
+                        <td><span class="status status-{{ b.status|lower }}">{{ b.status }}</span></td>
+                        <td>
+                            {% if b.status == 'Pending' and role in ['Administrator','Facility Manager','Department Approver'] %}
+                            <div class="action-buttons">
+                                <form action="{{ url_for('main.booking_action', booking_id=b.booking_id, action='approve') }}" method="POST"><button class="mini-btn approve" title="Approve"><i class="fa-solid fa-check"></i></button></form>
+                                <form action="{{ url_for('main.booking_action', booking_id=b.booking_id, action='reject') }}" method="POST"><button class="mini-btn reject" title="Reject"><i class="fa-solid fa-xmark"></i></button></form>
+                            </div>
+                            {% else %}—{% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" class="empty-state">No booking requests yet.</td></tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="content-grid" id="maintenance">
+            <div class="panel">
+                <div class="panel-heading"><div><span class="section-label">FACILITY CARE</span><h3>Report an issue</h3></div><div class="round-icon"><i class="fa-solid fa-toolbox"></i></div></div>
+                <form action="{{ url_for('main.create_ticket') }}" method="POST" class="form-stack">
+                    <label>Facility</label>
+                    <select name="facility_id" required>
+                        <option value="">Select facility</option>
+                        {% for f in facilities %}<option value="{{ f.facility_id }}">{{ f.name }}</option>{% endfor %}
+                    </select>
+                    <label>Priority</label>
+                    <select name="priority"><option>Low</option><option selected>Medium</option><option>High</option><option>Critical</option></select>
+                    <label>Describe the issue</label>
+                    <textarea name="issue" rows="3" placeholder="Describe the maintenance issue..." required></textarea>
+                    <button class="primary-btn" type="submit">Create maintenance ticket <i class="fa-solid fa-arrow-right"></i></button>
+                </form>
+            </div>
+
+            <div class="panel">
+                <div class="panel-heading"><div><span class="section-label">MAINTENANCE OPERATIONS</span><h3>Service tickets</h3></div><span class="count-badge">{{ tickets|length }} tickets</span></div>
+                <div class="ticket-list">
+                    {% for t in tickets %}
+                    <div class="ticket-card">
+                        <div class="ticket-top"><strong>#MT-{{ '%03d'|format(t.ticket_id) }}</strong><span class="status status-{{ t.status|lower }}">{{ t.status }}</span></div>
+                        <h4>{{ t.facility_name }}</h4>
+                        <p>{{ t.issue }}</p>
+                        <div class="ticket-meta"><span class="priority-{{ t.priority|lower }}">{{ t.priority }} priority</span><span>{{ t.reporter_name }}</span></div>
+
+                        {% if role in ['Administrator','Facility Manager'] and t.status != 'Resolved' %}
+                        <form class="inline-form" action="{{ url_for('main.assign_ticket', ticket_id=t.ticket_id) }}" method="POST">
+                            <select name="technician_id" required>
+                                <option value="">Assign technician</option>
+                                {% for tech in technicians %}<option value="{{ tech.user_id }}">{{ tech.name }}</option>{% endfor %}
+                            </select>
+                            <button class="mini-btn assign" title="Assign"><i class="fa-solid fa-user-check"></i></button>
+                        </form>
+                        {% endif %}
+
+                        {% if t.status != 'Resolved' and (role in ['Administrator','Facility Manager'] or (role == 'Technician' and t.assigned_to == session['user_id'])) %}
+                        <form action="{{ url_for('main.resolve_ticket', ticket_id=t.ticket_id) }}" method="POST" class="resolve-form">
+                            <button class="resolve-btn"><i class="fa-solid fa-check-circle"></i> Mark resolved</button>
+                        </form>
+                        {% endif %}
+                        {% if t.technician_name %}<div class="assigned"><i class="fa-solid fa-user-gear"></i> Assigned to {{ t.technician_name }}</div>{% endif %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">No maintenance tickets yet.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">CampusFlow Smart Facility Management <span>Secure · Connected · Efficient</span></footer>
+    </main>
+</div>
+
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
