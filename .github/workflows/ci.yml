@@ -36,6 +36,9 @@ jobs:
           pip install -r Assignment-4/backend/requirements.txt
           pip install pytest
 
+      - name: Intentional CI failure test
+        run: exit 1
+
       - name: Run automated tests
         run: python -m pytest -v Assignment-4/tests
 
