@@ -1,16 +1,21 @@
+
 name: Smart Campus CI Pipeline
 
 on:
   push:
+    branches:
+      - master
+      - main
     paths:
       - 'Assignment-4/**'
-  branches:
-    - master
-    - main
+      - '.github/workflows/**'
   pull_request:
+    branches:
+      - master
+      - main
     paths:
       - 'Assignment-4/**'
-    - '.github/workflows/**'
+      - '.github/workflows/**'
 
 jobs:
   test-and-build:
